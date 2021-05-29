@@ -1,29 +1,40 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import './main_window.css'
 import VerticalLinearStepper from './vertical_liniar_stepper'
-import App from "../App";
+import WelcomeWindow from "./welcome_window";
+import {AwesomeButton} from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 
 /* The scoreboard component (which also consists of 2 'Team' component) one for every game session. */
 class MainWindow extends Component {
     constructor(props) {
-    super(props);
-    this.state = {
-            is_pressed_start: true
+        super(props);
+        this.state = {
+            is_pressed_start: false
         }
     }
 
+    pressed_start_handler = () => {
+        let curr_state = this.state.is_pressed_start;
+        this.setState({is_pressed_start: !curr_state})
+    }
+
+
     render() {
 
+
         return (
-			<div className="scoreboard">
-
-                <div class="spacer">
-                    {this.state.is_pressed_start ? 'wow' : <VerticalLinearStepper />}
-	            </div>
-
-
-			</div>
-		)
+            <div>
+                <div className="scoreboard">
+                    <div class="spacer">
+                        {this.state.is_pressed_start ? <VerticalLinearStepper/> :  <WelcomeWindow/>}
+                    </div>
+                </div>
+                <div className='button_style'>
+                    {this.state.is_pressed_start? '' : <AwesomeButton type="youtube" onPress={this.pressed_start_handler} >Primary</AwesomeButton>}
+                </div>
+            </div>
+        )
     }
 }
 

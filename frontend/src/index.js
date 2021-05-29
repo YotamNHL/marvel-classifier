@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import FadeIn from 'react-fade-in';
 import reportWebVitals from './reportWebVitals';
-// import VerticalLinearStepper from './components/vertical_liniar_Stepper'
 import MainWindow from './components/main_window'
 
 ReactDOM.render(
@@ -11,6 +10,7 @@ ReactDOM.render(
       <FadeIn transitionDuration={1000}>
         <MainWindow />
       </FadeIn>
+
   </React.StrictMode>,
   document.getElementById('root')
 );

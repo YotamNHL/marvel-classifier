@@ -4,11 +4,8 @@
 
   .scoreboard {
     border-radius: 75px;
-    margin-top: 8%;
-    margin-bottom: 4%;
-    margin-left: 20%;
-    margin-right: 20%;
-    border: 1px solid #cbccce;
+      margin: 8% 20% 4%;
+      border: 1px solid #cbccce;
     background: #ffffff;
     display: list-item;
     /* grid-template-rows: 2rem minmax(3rem, 1fr) minmax(3rem, 1fr) 2rem; */
@@ -33,6 +30,7 @@
     padding: 0 1rem;
     color: #7c7f84;
     font-size: 0.9rem;
+
   }
   @media only screen and (min-width: 500px) {
     .scoreboard .title {
@@ -47,7 +45,7 @@
       display: block;
       /*grid-column: 2 / span 4;*/
       grid-row: 1 / span 1;
-      display: flex;
+      /*display: flex;*/
       flex-direction: row;
       border-bottom: 1px solid #cbccce;
     }
@@ -56,7 +54,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 0.9rem;
+      /*font-size: 0.9rem;*/
     }
   }
   .scoreboard .total {
@@ -228,3 +226,31 @@
   opacity: 1;
   transition: 0s
 }
+
+.button_style {
+    display: flex;
+    justify-content: center;
+}
+
+.aws-btn {    --button-default-height: 50px;
+    --button-default-font-size: 21px;
+    --button-default-border-radius: 19px;
+    --button-horizontal-padding: 26px;
+    --button-raise-level: 5px;
+    --button-hover-pressure: 2.5;
+    --transform-speed: 0.275s;
+    --button-primary-color: #6b0000;
+    --button-primary-color-dark: #878787;
+    --button-primary-color-light: #ffffff;
+    --button-primary-color-hover: #95c9e4;
+    --button-primary-border: none;
+    --button-secondary-color: #fafafa;
+    --button-secondary-color-dark: #67cbc3;
+    --button-secondary-color-light: #349890;
+    --button-secondary-color-hover: #ecf9f8;
+    --button-secondary-border: 2px solid #b3e5e1;
+    --button-anchor-color: #95d44a;
+    --button-anchor-color-dark: #52a934;
+    --button-anchor-color-light: #3f8228;
+    --button-anchor-color-hover: #89cf35;
+    --button-anchor-border: 2px solid #5bbd3a;}

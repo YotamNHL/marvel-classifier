@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -11,75 +11,73 @@ import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
-import Tooltip from '@material-ui/core/Tooltip';
 import './vertical_liniar_stepper.css'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-  },
-  button: {
-    marginTop: theme.spacing(1),
-    marginRight: theme.spacing(1),
-  },
-  actionsContainer: {
-    marginBottom: theme.spacing(2),
-  },
-  resetContainer: {
-    padding: theme.spacing(3),
-  },
+    root: {
+        width: '100%',
+    },
+    button: {
+        marginTop: theme.spacing(1),
+        marginRight: theme.spacing(1),
+    },
+    actionsContainer: {
+        marginBottom: theme.spacing(2),
+    },
+    resetContainer: {
+        padding: theme.spacing(3),
+    },
+    
 }));
 
 const PrettoSlider = withStyles({
-  root: {
-    color: '#52af77',
-    height: 8,
-  },
-  thumb: {
-    height: 24,
-    width: 24,
-    backgroundColor: '#fff',
-    border: '2px solid currentColor',
-    marginTop: -8,
-    marginLeft: -12,
-    '&:focus, &:hover, &$active': {
-      boxShadow: 'inherit',
+    root: {
+        color: '#52af77',
+        height: 8,
     },
-  },
-  active: {},
-  valueLabel: {
-    left: 'calc(-50% + 4px)',
-  },
-  track: {
-    height: 8,
-    borderRadius: 4,
-  },
-  rail: {
-    height: 8,
-    borderRadius: 4,
-  },
+    thumb: {
+        height: 24,
+        width: 24,
+        backgroundColor: '#fff',
+        border: '2px solid currentColor',
+        marginTop: -8,
+        marginLeft: -12,
+        '&:focus, &:hover, &$active': {
+            boxShadow: 'inherit',
+        },
+    },
+    active: {},
+    valueLabel: {
+        left: 'calc(-50% + 4px)',
+    },
+    track: {
+        height: 8,
+        borderRadius: 4,
+    },
+    rail: {
+        height: 8,
+        borderRadius: 4,
+    },
 })(Slider);
 
 function getSteps() {
-  return ['Marvel AI', 'Basic Info', 'Create an ad group', 'Create an ad'];
+    return ['Basic Info', 'Create an ad group', 'Create an ad'];
 }
 
 function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return 'Welcome to MARVELAI!'
-    case 1:
-      return getBasicInfo();
-    case 2:
-      return getStatsInfo();
-    default:
-      return 'Unknown step';
-  }
+    switch (step) {
+        case 0:
+            return getBasicInfo();
+        case 1:
+            return getStatsInfo();
+        case 2:
+            return '';
+        default:
+            return 'Unknown step';
+    }
 }
 
 function getBasicInfo() {
@@ -212,62 +210,63 @@ function getStatsInfo() {
 }
 
 export default function VerticalLinearStepper() {
-  const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const steps = getSteps();
+    const classes = useStyles();
+    const [activeStep, setActiveStep] = React.useState(0);
+    const steps = getSteps();
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+    const handleReset = () => {
+        setActiveStep(0);
+    };
 
-  return (
-
-        <div className={classes.root}>
-          <Stepper activeStep={activeStep} orientation="vertical">
-            {steps.map((label, index) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-                <StepContent>
-                  <Typography>{getStepContent(index)}</Typography>
-                  <div className={classes.actionsContainer}>
-                    <div>
-                      <Button
-                        disabled={activeStep === 0}
-                        onClick={handleBack}
-                        className={classes.button}
-                      >
-                        Back
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleNext}
-                        className={classes.button}
-                      >
-                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                      </Button>
-                    </div>
-                  </div>
-                </StepContent>
-              </Step>
-            ))}
-          </Stepper>
-          {activeStep === steps.length && (
-            <Paper square elevation={0} className={classes.resetContainer}>
-              <Typography>All steps completed - you&apos;re finished</Typography>
-              <Button onClick={handleReset} className={classes.button}>
-                Reset
-              </Button>
-            </Paper>
-          )}
+    return (
+        <div className='wrapper2'>
+            <div className={classes.root}>
+                <Stepper activeStep={activeStep} orientation="vertical">
+                    {steps.map((label, index) => (
+                        <Step key={label}>
+                            <StepLabel>{label}</StepLabel>
+                            <StepContent>
+                                <Typography>{getStepContent(index)}</Typography>
+                                <div className={classes.actionsContainer}>
+                                    <div>
+                                        <Button
+                                            disabled={activeStep === 0}
+                                            onClick={handleBack}
+                                            className={classes.button}
+                                        >
+                                            Back
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={handleNext}
+                                            className={classes.button}
+                                        >
+                                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                        </Button>
+                                    </div>
+                                </div>
+                            </StepContent>
+                        </Step>
+                    ))}
+                </Stepper>
+                {activeStep === steps.length && (
+                    <Paper square elevation={0} className={classes.resetContainer}>
+                        <Typography>All steps completed - you&apos;re finished</Typography>
+                        <Button onClick={handleReset} className={classes.button}>
+                            Reset
+                        </Button>
+                    </Paper>
+                )}
+            </div>
         </div>
-  );
+    );
 }
