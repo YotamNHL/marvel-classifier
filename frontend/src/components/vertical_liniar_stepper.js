@@ -79,21 +79,46 @@ export default function VerticalLinearStepper() {
                            'Longevity',
                            'Super Speed'
         ]
+    const superpowers_to_emojy = {
+                           'Super Strength': '💪',
+                           'Stamina': '🏃',
+                           'Stealth': '🤫',
+                           'Enhanced Senses': '🧐',
+                           'Flight': '✈️',
+                           'Energy Blasts': '⚡',
+                           'Energy Absorption': '🧽',
+                           'Shapeshifting': '🦎',
+                           'Accelerated Healing': '🩹',
+                           'Force Fields': '🛡️',
+                           'Psionic Powers': '🔮',
+                           'Weapon-based Powers': '🪓',
+                           'Energy Manipulation': '🪄',
+                           'Reflexes': '🐈',
+                           'Molecular Manipulation': '⚛️',
+                           'Super Durability': '✊',
+                           'Agility': '💨',
+                           'Longevity': '👴',
+                           'Super Speed': '🏁'
+    }
     const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
+        width: '100%'
     },
     button: {
         marginTop: theme.spacing(1),
         marginRight: theme.spacing(1),
+        backgroundColor: '#a9334e',
     },
     actionsContainer: {
         marginBottom: theme.spacing(2),
+        color: '#a9334e'
     },
     resetContainer: {
         padding: theme.spacing(3),
     },
-
+    icon: {
+        backgroundColor: '#a9334e',
+    }
 }));
     const classes = useStyles();
 
@@ -193,6 +218,12 @@ export default function VerticalLinearStepper() {
     const basicInfoInputs =
         <div className='basic_info_class'>
             <TextField id="username" name="username" label="Super Name" variant="filled" placeholder='e.g. Spider-Megaboy' onChange={handleChangeInput}/>
+            <br/>
+            <br/>
+            <TextField id="Height" name="Height" label="Height" variant="filled" placeholder='in CM' onChange={handleChangeInput}/>
+            <br/>
+            <br/>
+            <TextField id="Weight" name="Weight" label="Weight" variant="filled" placeholder='in KG' onChange={handleChangeInput}/>
             <br/>
             <br/>
             <FormControl className='Class2' fullWidth>
@@ -304,6 +335,7 @@ export default function VerticalLinearStepper() {
                     <MenuItem value='Zen-Whoberian'>Zen-Whoberian</MenuItem>
                 </Select>
             </FormControl>
+
         </div>
     return basicInfoInputs
 }
@@ -338,13 +370,13 @@ export default function VerticalLinearStepper() {
         const superpower_classname = "superpower_" + superpower
         const checkbox =
                 <div className={superpower_classname}>
+                        {superpowers_to_emojy[superpower]}
                         <input
                             name={superpower}
                             value={superpowerState}
                             type="checkbox"
                             onChange={handleChangeCheckbox}
                         />
-
                         {superpower}
                 </div>
         return checkbox
