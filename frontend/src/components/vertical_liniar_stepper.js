@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -12,11 +12,74 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import {withStyles} from '@material-ui/core/styles';
-import Slider from '@material-ui/core/Slider';
-import './vertical_liniar_stepper.css'
+import './styles/vertical_liniar_stepper.css'
+import {RangeStepInput} from 'react-range-step-input';
+import 'rc-checkbox/assets/index.css';
 
-const useStyles = makeStyles((theme) => ({
+
+
+export default function VerticalLinearStepper() {
+    const [activeStep, setActiveStep] = React.useState(0);
+    const steps = getSteps();
+    const [state, setState] = React.useState({
+        username: '',
+        Gender: 'Male',
+        HairColor: 'No Hair',
+        EyeColor: '',
+        Race: 'Unknown Race',
+        Strength: 50,
+        Speed: 50,
+        Durability: 50,
+        Power: 50,
+        Combat: 50,
+        Intelligence: 50,
+        Height: 170,
+        Weight: 75,
+        'Super Strength': false,
+        'Stamina': false,
+        'Stealth': false,
+        'Enhanced Senses': false,
+        'Flight': false,
+        'Energy Blasts': false,
+        'Energy Absorption': false,
+        'Shapeshifting': false,
+        'Accelerated Healing': false,
+        'Force Fields': false,
+        'Psionic Powers': false,
+        'Weapon-based Powers': false,
+        'Energy Manipulation': false,
+        'Reflexes': false,
+        'Molecular Manipulation': false,
+        'Super Durability': false,
+        'Agility': false,
+        'Longevity': false,
+        'Super Speed': false,
+        goodOrEvil: false,
+        isRequestSent: false,
+        isResultReady: false
+    });
+
+    const superpowers = ['Super Strength',
+                           'Stamina',
+                           'Stealth',
+                           'Enhanced Senses',
+                           'Flight',
+                           'Energy Blasts',
+                           'Energy Absorption',
+                           'Shapeshifting',
+                           'Accelerated Healing',
+                           'Force Fields',
+                           'Psionic Powers',
+                           'Weapon-based Powers',
+                           'Energy Manipulation',
+                           'Reflexes',
+                           'Molecular Manipulation',
+                           'Super Durability',
+                           'Agility',
+                           'Longevity',
+                           'Super Speed'
+        ]
+    const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
     },
@@ -30,60 +93,106 @@ const useStyles = makeStyles((theme) => ({
     resetContainer: {
         padding: theme.spacing(3),
     },
-    
+
 }));
+    const classes = useStyles();
 
-const PrettoSlider = withStyles({
-    root: {
-        color: '#52af77',
-        height: 8,
-    },
-    thumb: {
-        height: 24,
-        width: 24,
-        backgroundColor: '#fff',
-        border: '2px solid currentColor',
-        marginTop: -8,
-        marginLeft: -12,
-        '&:focus, &:hover, &$active': {
-            boxShadow: 'inherit',
-        },
-    },
-    active: {},
-    valueLabel: {
-        left: 'calc(-50% + 4px)',
-    },
-    track: {
-        height: 8,
-        borderRadius: 4,
-    },
-    rail: {
-        height: 8,
-        borderRadius: 4,
-    },
-})(Slider);
+    const handleChangeInput = (event) => {
+        setState({...state, [event.target.name]: event.target.value});
+    };
 
-function getSteps() {
-    return ['Basic Info', 'Create an ad group', 'Create an ad'];
-}
+    const handleChangeCheckbox = (event) => {
+        setState({...state, [event.target.name]: event.target.checked});
+    };
 
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return getBasicInfo();
-        case 1:
-            return getStatsInfo();
-        case 2:
-            return '';
-        default:
-            return 'Unknown step';
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+        setState({...state,
+                        isRequestSent: false,
+                        isResultReady: false
+        })
+    };
+
+    function returnLoadingGif() {
+        const gif_div = <div className="image-blurred-edge">
+            <img src="thinking_loading.gif"/>
+            <br/>
+            Thinking...
+        </div>
+        return gif_div
     }
-}
 
-function getBasicInfo() {
+    function returnResult() {
+        let resultStr = "You are..."
+        let subtitleStr;
+        let gif_url;
+        if(state.goodOrEvil) {
+            gif_url = "thanos_dance.gif"
+            resultStr += "A SUPERVILLAIN!"
+            subtitleStr =  "have fun causing havoc"
+        }
+        else{
+            gif_url = "spiderman_loading.gif"
+            resultStr += "A SUPERHERO!"
+            subtitleStr =  "You're one of the good guys!"
+        }
+        const gif_div = <div className="gif_div_style">
+                            {resultStr}
+                            <br/>
+                            {subtitleStr}
+                            <br/>
+                            <img src={gif_url} />
+                        </div>
+        return gif_div
+    }
+
+    function getHeroProba() {
+        let all_features_dict = state
+        let all_features_string = JSON.stringify(all_features_dict).replace(/%22/g,"")
+        let url = "http://127.0.0.1:5000/getGoodBadProbability?HeroData=" + all_features_string;
+        return fetch(url)
+            .then((res) => {return res.json();})
+            .then(data => data['result']);
+    }
+
+    function putResultInState() {
+        setState({...state, isRequestSent: true})
+        getHeroProba()
+            .then((value) => setState({...state,
+                                                        isRequestSent: true,
+                                                        isResultReady:true,
+                                                        goodOrEvil: value}));
+    }
+
+    function getSteps() {
+        return ['Basic Info', 'Stats', 'Super Powers'];
+    }
+
+    function getStepContent(step) {
+        switch (step) {
+            case 0:
+                return getBasicInfo();
+            case 1:
+                return getStatsInfo();
+            case 2:
+                return getSuperPowers();
+            default:
+                return 'Unknown step';
+        }
+    }
+
+    function getBasicInfo() {
     const basicInfoInputs =
         <div className='basic_info_class'>
-            <TextField id="filled-basic" label="Super Name" variant="filled" placeholder='e.g. Spider-Megaboy'/>
+            <TextField id="username" name="username" label="Super Name" variant="filled" placeholder='e.g. Spider-Megaboy' onChange={handleChangeInput}/>
             <br/>
             <br/>
             <FormControl className='Class2' fullWidth>
@@ -93,8 +202,10 @@ function getBasicInfo() {
                         name: 'Gender',
                         id: 'filled-gender-native-simple',
                     }}
+                    name='Gender'
                     defaultValue='Male'
                     label='Gender'
+                    onChange={handleChangeInput}
                 >
                     <option value='Male'>Male</option>
                     <option value='Female'>Female</option>
@@ -107,6 +218,8 @@ function getBasicInfo() {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
+                    name="HairColor"
+                    onChange={handleChangeInput}
                     inputProps={{
                         name: 'HairColor',
                         id: 'age-native-simple',
@@ -133,8 +246,11 @@ function getBasicInfo() {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
+                    name="EyeColor"
+                    onChange={handleChangeInput}
+
                     inputProps={{
-                        name: 'HairColor',
+                        name: 'EyeColor',
                         id: 'age-native-simple',
                     }}
                 >
@@ -157,6 +273,8 @@ function getBasicInfo() {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
+                    name="Race"
+                    onChange={handleChangeInput}
                     inputProps={{
                         name: 'Race',
                         id: 'age-native-simple',
@@ -190,41 +308,66 @@ function getBasicInfo() {
     return basicInfoInputs
 }
 
-function getStatsInfo() {
-    const statsInfoInputs =
-        <div className='sliders_class'>
-            <Typography gutterBottom>Strength</Typography>
-            <PrettoSlider valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={50}/>
-            <Typography gutterBottom>Speed</Typography>
-            <PrettoSlider valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={50}/>
-            <Typography gutterBottom>Durability</Typography>
-            <PrettoSlider valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={50}/>
-            <Typography gutterBottom>Power</Typography>
-            <PrettoSlider valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={50}/>
-            <Typography gutterBottom>Combat</Typography>
-            <PrettoSlider valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={50}/>
-            <Typography gutterBottom>Intelligence</Typography>
-            <PrettoSlider valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={50}/>
-        </div>
-    return statsInfoInputs
-}
+    function getStatsInfo() {
+        const statsInfoInputs =
+            <div className='sliders_class'>
+                <Typography gutterBottom>Strength</Typography>
+                <RangeStepInput name="Strength" min={0} max={100} step={1}
+                                onChange={handleChangeInput}/> {state.Strength}
+                <Typography gutterBottom>Speed</Typography>
+                <RangeStepInput name="Speed" min={0} max={100} step={1}
+                                onChange={handleChangeInput}/> {state.Speed}
+                <Typography gutterBottom>Durability</Typography>
+                <RangeStepInput name="Durability" min={0} max={100} step={1}
+                                onChange={handleChangeInput}/> {state.Durability}
+                <Typography gutterBottom>Power</Typography>
+                <RangeStepInput name="Power" min={0} max={100} step={1}
+                                onChange={handleChangeInput}/> {state.Power}
+                <Typography gutterBottom>Combat</Typography>
+                <RangeStepInput name="Combat" min={0} max={100} step={1}
+                                onChange={handleChangeInput}/> {state.Combat}
+                <Typography gutterBottom>Intelligence</Typography>
+                <RangeStepInput name="Intelligence" min={0} max={100} step={1}
+                                onChange={handleChangeInput}/> {state.Intelligence}
+            </div>
+        return statsInfoInputs
+    }
 
-export default function VerticalLinearStepper() {
-    const classes = useStyles();
-    const [activeStep, setActiveStep] = React.useState(0);
-    const steps = getSteps();
+    function renderCheckbox(superpower) {
+        const superpowerState = "state." + superpower;
+        const superpower_classname = "superpower_" + superpower
+        const checkbox =
+                <div className={superpower_classname}>
+                        <input
+                            name={superpower}
+                            value={superpowerState}
+                            type="checkbox"
+                            onChange={handleChangeCheckbox}
+                        />
 
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
+                        {superpower}
+                </div>
+        return checkbox
+    }
 
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
+    function listCheckboxesBySuperpower() {
+        let i = 0;
+        let checkboxesList = []
 
-    const handleReset = () => {
-        setActiveStep(0);
-    };
+        for (i = 0; i < superpowers.length; i++) {
+            checkboxesList.push(renderCheckbox(superpowers[i]))
+        }
+        return checkboxesList
+    }
+
+    function getSuperPowers() {
+        const superPowers =
+                <div className="all_superpowers_div">
+                    {listCheckboxesBySuperpower()}
+                </div>
+        return superPowers
+    }
+
 
     return (
         <div className='wrapper2'>
@@ -260,7 +403,8 @@ export default function VerticalLinearStepper() {
                 </Stepper>
                 {activeStep === steps.length && (
                     <Paper square elevation={0} className={classes.resetContainer}>
-                        <Typography>All steps completed - you&apos;re finished</Typography>
+                        {state.isRequestSent ? null : putResultInState()}
+                        {state.isResultReady ? returnResult() : returnLoadingGif()}
                         <Button onClick={handleReset} className={classes.button}>
                             Reset
                         </Button>

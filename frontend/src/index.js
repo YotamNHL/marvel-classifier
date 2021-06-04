@@ -7,7 +7,7 @@ import MainWindow from './components/main_window'
 
 ReactDOM.render(
   <React.StrictMode>
-      <FadeIn transitionDuration={1000}>
+      <FadeIn transitionDuration={1000} visable={20}>
         <MainWindow />
       </FadeIn>
 

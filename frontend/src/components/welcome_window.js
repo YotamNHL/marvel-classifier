@@ -1,6 +1,6 @@
 import React from "react";
 import { AwesomeButton } from "react-awesome-button";
-import './welcome_window.css';
+import './styles/welcome_window.css';
 
 export default function WelcomeWindow() {
 
@@ -32,14 +32,16 @@ export default function WelcomeWindow() {
               <span>A</span>
               <span>I</span>
           </div>
-          Here you will be able to create your own Alter-Ego,
-          <br/>
-          And I will tell you if you are a HERO or a VILLAIN!
-          <br/>
-          <div>
-            Are you ready?!
+          <div className='subtitle'>
+              Here you will be able to create your own Alter-Ego,
+              <br/>
+              And I will tell you if you are a HERO or a VILLAIN!
+              <br/>
+              <div>
+                Ready?
+              </div>
+              <br/>
           </div>
-
       </div>
   );
 }

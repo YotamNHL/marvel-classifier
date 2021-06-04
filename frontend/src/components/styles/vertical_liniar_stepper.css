@@ -1,0 +1,33 @@
+.sliders_class {
+    margin: 8% 20% 4%;
+}
+.basic_info_class {
+    margin: 8% 40% 4%;
+}
+
+.wizard_style_wrapper {
+    background-color: red;
+}
+
+.all_superpowers_div {
+    margin-left: 40%;
+    margin-right: 40%;
+}
+
+.sliders_class {
+    margin-left: 40%;
+    margin-right: 40%;
+}
+
+.gif_div_style {
+    display: flex;
+    justify-content: center;
+}
+
+.image-blurred-edge {
+    display: flex;
+    justify-content: center;
+    /* you need to match the shadow color to your background or image border for the desired effect*/
+    /*height: 400px;*/
+    /*width: 400px;*/
+}
