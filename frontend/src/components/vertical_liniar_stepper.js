@@ -301,14 +301,11 @@ export default function VerticalLinearStepper() {
                     <MenuItem value='Brown'>Brown</MenuItem>
                     <MenuItem value='Red'>Red</MenuItem>
                     <MenuItem value='Blond'>Blond</MenuItem>
-                    <MenuItem value='Grey'>Grey</MenuItem>
-                    <MenuItem value='Purple'>Purple</MenuItem>
-                    <MenuItem value='Blue'>Blue</MenuItem>
                     <MenuItem value='Green'>Green</MenuItem>
                     <MenuItem value='White'>White</MenuItem>
-                    <MenuItem value='Strawberry Blond'>Strawberry Blond</MenuItem>
-                    <MenuItem value='Silver'>Silver</MenuItem>
                     <MenuItem value='No Hair'>No Hair</MenuItem>
+                    <MenuItem value='Other'>Other</MenuItem>
+
                 </Select>
             </FormControl>
             <br/>
@@ -326,16 +323,14 @@ export default function VerticalLinearStepper() {
                         id: 'age-native-simple',
                     }}
                 >
-                    <MenuItem value='Black'>Black</MenuItem>
-                    <MenuItem value='Brown'>Brown</MenuItem>
-                    <MenuItem value='Yellow'>Yellow</MenuItem>
-                    <MenuItem value='Grey'>Grey</MenuItem>
-                    <MenuItem value='Purple'>Purple</MenuItem>
-                    <MenuItem value='Red'>Red</MenuItem>
-                    <MenuItem value='Blue'>Blue</MenuItem>
-                    <MenuItem value='Green'>Green</MenuItem>
-                    <MenuItem value='White'>White</MenuItem>
-                    <MenuItem value='Silver'>Silver</MenuItem>
+                    <MenuItem value='black'>Black</MenuItem>
+                    <MenuItem value='brown'>Brown</MenuItem>
+                    <MenuItem value='yellow'>Yellow</MenuItem>
+                    <MenuItem value='red'>Red</MenuItem>
+                    <MenuItem value='blue'>Blue</MenuItem>
+                    <MenuItem value='green'>Green</MenuItem>
+                    <MenuItem value='white'>White</MenuItem>
+                    <MenuItem value='Other'>Other</MenuItem>
                 </Select>
             </FormControl>
             <br/>
@@ -353,27 +348,17 @@ export default function VerticalLinearStepper() {
                     }}
                 >
                     <MenuItem value='Alien'>Alien</MenuItem>
-                    <MenuItem value='Android'>Android</MenuItem>
-                    <MenuItem value='Animal'>Animal</MenuItem>
                     <MenuItem value='Asgardian'>Asgardian</MenuItem>
-                    <MenuItem value='Atlantean'>Atlantean</MenuItem>
-                    <MenuItem value='Clone'>Clone</MenuItem>
                     <MenuItem value='Cyborg'>Cyborg</MenuItem>
                     <MenuItem value='Demon'>Demon</MenuItem>
-                    <MenuItem value='Eternal'>Eternal</MenuItem>
-                    <MenuItem value='Flora Colossus'>Flora Colossus</MenuItem>
-                    <MenuItem value='Frost Giant'>Frost Giant</MenuItem>
                     <MenuItem value='God / Eternal'>God / Eternal</MenuItem>
                     <MenuItem value='Human'>Human</MenuItem>
                     <MenuItem value='Inhuman'>Inhuman</MenuItem>
-                    <MenuItem value='Luphomoid'>Luphomoid</MenuItem>
                     <MenuItem value='Mutant'>Mutant</MenuItem>
-                    <MenuItem value='Neyaphem'>Neyaphem</MenuItem>
-                    <MenuItem value='Spartoi'>Spartoi</MenuItem>
-                    <MenuItem value='Strontian'>Strontian</MenuItem>
+                    <MenuItem value='Cosmic Entity'>Cosmic Entity</MenuItem>
+                    <MenuItem value='Radiation'>Radiation</MenuItem>
                     <MenuItem value='Symbiote'>Symbiote</MenuItem>
-                    <MenuItem value='Vampire'>Vampire</MenuItem>
-                    <MenuItem value='Zen-Whoberian'>Zen-Whoberian</MenuItem>
+                    <MenuItem value='Other'>Other</MenuItem>
                 </Select>
             </FormControl>
 
