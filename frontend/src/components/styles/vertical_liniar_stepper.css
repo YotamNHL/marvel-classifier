@@ -1,3 +1,5 @@
+
+
 .sliders_class {
     margin: 8% 20% 4%;
 }
@@ -24,10 +26,42 @@
     justify-content: center;
 }
 
+.result_div_style {
+    margin-right: 30%;
+    margin-left: 30%;
+}
+
 .image-blurred-edge {
     display: flex;
     justify-content: center;
     /* you need to match the shadow color to your background or image border for the desired effect*/
     /*height: 400px;*/
     /*width: 400px;*/
+}
+
+h1 {
+  font-family: 'Inconsolata', Consolas, monospace;
+	font-size: 4em;
+	color: #d7b94c;
+}
+
+.typing {
+  position: relative;
+
+}
+
+typing::after {
+    content: "|";
+    position: absolute;
+    right: 0;
+    width: 100%;
+    animation: typing 4s steps(16) forwards,
+      caret 1s infinite;
+}
+
+@keyframes typing {
+	to { width: 0 }
+}
+@keyframes caret {
+	50% { color: transparent }
 }

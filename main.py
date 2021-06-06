@@ -1,47 +1,49 @@
+import matplotlib.pyplot as plt
 import pandas as pd
 import os
 from utils.general_utils import *
 from catboost import CatBoostClassifier
 from utils.plot_utils import *
 import json
+import shap
 
 
 def aggregate_features(given_df, with_class=True):
     top_features = [
-                    # categorical features
-                    'Gender',
-                    'HairColor',
-                    'EyeColor',
-                    'Race',
-                    # int features
-                    'Strength',
-                    'Speed',
-                    'Durability',
-                    'Power',
-                    'Combat',
-                    'Intelligence',
-                    'Height',
-                    'Weight',
-                    # Boolean features
-                    'Super Strength',
-                    'Stamina',
-                    'Stealth',
-                    'Enhanced Senses',
-                    'Flight',
-                    'Energy Blasts',
-                    'Energy Absorption',
-                    'Shapeshifting',
-                    'Accelerated Healing',
-                    'Force Fields',
-                    'Psionic Powers',
-                    'Weapon-based Powers',
-                    'Energy Manipulation',
-                    'Reflexes',
-                    'Molecular Manipulation',
-                    'Super Durability',
-                    'Agility',
-                    'Longevity',
-                    'Super Speed']
+        # categorical features
+        'Gender',
+        'HairColor',
+        'EyeColor',
+        'Race',
+        # int features
+        'Strength',
+        'Speed',
+        'Durability',
+        'Power',
+        'Combat',
+        'Intelligence',
+        'Height',
+        'Weight',
+        # Boolean features
+        'Super Strength',
+        'Stamina',
+        'Stealth',
+        'Enhanced Senses',
+        'Flight',
+        'Energy Blasts',
+        'Energy Absorption',
+        'Shapeshifting',
+        'Accelerated Healing',
+        'Force Fields',
+        'Psionic Powers',
+        'Weapon-based Powers',
+        'Energy Manipulation',
+        'Reflexes',
+        'Molecular Manipulation',
+        'Super Durability',
+        'Agility',
+        'Longevity',
+        'Super Speed']
     if with_class:
         top_features.append('class')
 
@@ -63,8 +65,6 @@ def aggregate_features(given_df, with_class=True):
         print(given_df['Combat'])
         print(list(given_df.columns))
 
-
-
     given_df[cat_cols] = given_df[cat_cols].fillna(value='no_value')
     given_df[int_cols] = given_df[int_cols].fillna(value=0)
     given_df[bool_cols] = given_df[bool_cols].fillna(value=False)
@@ -72,14 +72,31 @@ def aggregate_features(given_df, with_class=True):
     for col in int_cols:
         given_df[col] = given_df[col].astype(int)
 
-    given_df['Total'] = given_df['Intelligence'] + given_df['Strength'] + given_df['Speed'] + given_df['Durability'] + given_df['Power'] + given_df['Combat']
+    # Handle sparsing in haircolor values
+    haircolors_5_or_less = given_df['HairColor'].value_counts()
+    haircolors_5_or_less = haircolors_5_or_less.loc[haircolors_5_or_less < 5].index.tolist()
+    given_df['HairColor'] = given_df['HairColor'].apply(
+        lambda x: "Black" if x == 'black' else 'Other' if x in haircolors_5_or_less else x)
+
+    # Handle sparsing in eyecolor values
+    eyecolors_5_or_less = given_df['EyeColor'].value_counts()
+    eyecolors_5_or_less = eyecolors_5_or_less.loc[eyecolors_5_or_less < 5].index.tolist()
+    eyecolors_5_or_less.append('no_value')
+    given_df['EyeColor'] = given_df['EyeColor'].apply(lambda x: 'Other' if x in eyecolors_5_or_less else x)
+
+    # Handle sparsing in race values
+    race_3_or_less = given_df['Race'].value_counts()
+    race_3_or_less = race_3_or_less.loc[race_3_or_less < 3].index.tolist()
+    race_3_or_less.append('Unknown Race')
+    given_df['Race'] = given_df['Race'].apply(lambda x: 'Other' if x in race_3_or_less else x)
+
+    given_df['Total'] = given_df['Intelligence'] + given_df['Strength'] + given_df['Speed'] + given_df['Durability'] + \
+                        given_df['Power'] + given_df['Combat']
     superpowers_cols = bool_cols
     for col in ['is_human', 'is_mutant', 'has_blue_eyes']:
         superpowers_cols.remove(col)
 
     given_df['amount_of_superpowers'] = given_df[superpowers_cols].astype(int).sum(axis=1)
-
-
 
     given_df = given_df.reset_index()
     given_df = given_df.reindex(sorted(given_df.columns), axis=1)
@@ -88,8 +105,8 @@ def aggregate_features(given_df, with_class=True):
 
 def get_hero_proba(given_str):
     given_dict = json.loads(given_str)
-    print(os.getcwd())
     given_df = pd.DataFrame(given_dict, index=[0])
+    # given_df = pd.read_json(given_dict)
     df = pd.read_csv('data/marvel_demo_stats_powers.csv')
     df = df.replace('-', 'no_value')
     df['EyeColor'] = df['EyeColor'].apply(lambda
@@ -102,11 +119,34 @@ def get_hero_proba(given_str):
     X, y = df.drop(['index', 'class'], axis=1), df['class']
 
     cbc = CatBoostClassifier(cat_features=get_cat_feature_names(X), class_weights=[0.33, 0.67], random_state=5,
-                             bootstrap_type='Bayesian', rsm=0.1)
+                             bootstrap_type='Bayesian', rsm=0.1, verbose=0)
     cbc.fit(X, y)
     result = cbc.predict(given_df_aggregated)
-    print(result)
-    return result
+    proba = list(cbc.predict_proba(given_df_aggregated))
+    certainty = 100.0 * max(proba[0])
+    shap_values = shap.TreeExplainer(cbc).shap_values(given_df_aggregated)
+    shap_list = list(shap_values)[0]
+    final_payload = []
+    i = 0
+    features = given_df_aggregated.columns
+    for value in shap_list:
+        temp_dict = {}
+        temp_dict['feature'] = features[i]
+        temp_dict['score'] = value
+        final_payload.append(temp_dict)
+        i += 1
+
+    final_payload_sorted = sorted(final_payload, key=lambda k: k['score'], reverse=True)
+    top_five_indicators = final_payload_sorted[:7]
+    final_indicators_list = []
+    for feature in top_five_indicators:
+        final_indicators_list.append(feature['feature'])
+
+    final_result_dict = {}
+    final_result_dict['result'] = True if result[0] == 'True' else False
+    final_result_dict['certainty'] = round(certainty, 2)
+    final_result_dict['indicators'] = final_indicators_list
+    return final_result_dict
 
 
 sample_df = pd.DataFrame(columns=['Gender', 'EyeColor', 'HairColor', 'Race',
@@ -130,8 +170,10 @@ sample_df = pd.DataFrame(columns=['Gender', 'EyeColor', 'HairColor', 'Race',
                                   'Super Speed',
                                   'Super Strength',
                                   'Stealth'
-                                  ], data=[['Male', 'Blue', 'Blonde', 'Mutant',
-                                            '170', '100', '80', '80', '50', '50', '60', '100', '70',
-                                            True, False, True, False, False, False, True, False,
-                                            True, False, False, False, False, False, False, False, True, False
+                                  ], data=[['Female', 'Blue', 'Blonde', 'Human',
+                                            '170', '120', '80', '80', '50', '50', '60', '100', '70',
+                                            False, True, False, False, True, False, False, True,
+                                            False, False, True, False, True, True, True, False, True, False
                                             ]])
+
+str_sample = json.dumps(sample_df.to_json())

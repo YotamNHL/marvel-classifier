@@ -9,14 +9,16 @@ import ast
 
 # Create the application.
 app = Flask(__name__, static_folder='./static',
-                  template_folder='./template')
+            template_folder='./template')
 CORS(app)
+
 
 @app.route('/getGoodBadProbability', methods=['GET'])
 def get_proba():
     hero_data = request.args.get("HeroData", default=None, type=str)
-    result = {'result': (get_hero_proba(hero_data)[0]) == 'True'}
-    # result = {'result': True}
+    result = {'result': (get_hero_proba(hero_data))}
+    print(result)
+    print(type(result))
     return flask.jsonify(result)
 
 

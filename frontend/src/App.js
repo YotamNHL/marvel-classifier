@@ -1,4 +1,4 @@
-import './App.css';
+import './components/styles/App.css';
 import React from 'react';
 import FadeIn from 'react-fade-in';
 

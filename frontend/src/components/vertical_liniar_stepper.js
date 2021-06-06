@@ -13,8 +13,12 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import './styles/vertical_liniar_stepper.css'
+import './styles/typing.css'
 import {RangeStepInput} from 'react-range-step-input';
 import 'rc-checkbox/assets/index.css';
+import GaugeChart from 'react-gauge-chart'
+import FadeIn from 'react-fade-in';
+import {F} from "react-select/dist/index-4bd03571.esm";
 
 
 
@@ -25,7 +29,7 @@ export default function VerticalLinearStepper() {
         username: '',
         Gender: 'Male',
         HairColor: 'No Hair',
-        EyeColor: '',
+        EyeColor: 'Black',
         Race: 'Unknown Race',
         Strength: 50,
         Speed: 50,
@@ -148,33 +152,70 @@ export default function VerticalLinearStepper() {
 
     function returnLoadingGif() {
         const gif_div = <div className="image-blurred-edge">
-            <img src="thinking_loading.gif"/>
-            <br/>
-            Thinking...
-        </div>
+                            <img src="thinking_loading.gif"/>
+                            <br/>
+                            <div>
+                                Thinking...
+                            </div>
+                        </div>
         return gif_div
     }
 
     function returnResult() {
-        let resultStr = "You are..."
+        let resultStr = "You will become..."
         let subtitleStr;
         let gif_url;
-        if(state.goodOrEvil) {
+        if(state.goodOrEvil['result']) {
             gif_url = "thanos_dance.gif"
             resultStr += "A SUPERVILLAIN!"
-            subtitleStr =  "have fun causing havoc"
+            subtitleStr =  "have fun causing havoc."
         }
         else{
             gif_url = "spiderman_loading.gif"
             resultStr += "A SUPERHERO!"
-            subtitleStr =  "You're one of the good guys!"
+            subtitleStr =  "Enjoy being one of the good ones."
         }
-        const gif_div = <div className="gif_div_style">
-                            {resultStr}
+        let certaintyStr = "I'm about " + state.goodOrEvil['certainty'].toString() + "% certain in my estimation."
+        let indicators = state.goodOrEvil['indicators']
+        let indicatorsStr = "The main indicators for my assesments are the following elements: \n"
+
+        for(let i=0; i < indicators.length; i++) {
+            indicatorsStr += indicators[i] + ", "
+        }
+        indicatorsStr = indicatorsStr.substring(0, indicatorsStr.length - 2);
+        indicatorsStr += "."
+        const gif_div = <div className="result_div_style">
+                            <FadeIn>
+                                {resultStr}
+                            </FadeIn>
                             <br/>
-                            {subtitleStr}
                             <br/>
-                            <img src={gif_url} />
+                            <FadeIn delay={1300}>
+                                <GaugeChart id="gauge-chart3"
+                                  nrOfLevels={20}
+                                  arcWidth={0.3}
+                                  percent={state.goodOrEvil['certainty'] / 100}
+                                  textColor="black"
+                                  formatTextValue={value => value+' Certainty'}
+                                />
+                            </FadeIn>
+                            <br/>
+                            <br/>
+                            <FadeIn delay={3000}>
+                                {indicatorsStr}
+                            </FadeIn>
+                            <br/>
+                            <br/>
+                            <FadeIn delay={4}>
+                                {subtitleStr}
+                            </FadeIn>
+                            <br/>
+                            <br/>
+                            <FadeIn delay={6000}>
+                                <div className="gif_div_style">
+                                    <img src={gif_url} />
+                                </div>
+                            </FadeIn>
                         </div>
         return gif_div
     }

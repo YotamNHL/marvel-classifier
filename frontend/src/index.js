@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './components/styles/index.css';
 import FadeIn from 'react-fade-in';
 import reportWebVitals from './reportWebVitals';
 import MainWindow from './components/main_window'

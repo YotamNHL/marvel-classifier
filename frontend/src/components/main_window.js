@@ -35,13 +35,15 @@ class MainWindow extends Component {
                     {this.state.is_pressed_start ? '' :
                         <AwesomeButton type="youtube" onPress={this.pressed_start_handler}>Lets Go</AwesomeButton>}
                 </div>
+                <br/>
+                <br/>
+                <br/>
                 <div className="audio_player">
                     <ReactAudioPlayer
-                        src="avengers_theme_8bit.mp3"
+                        src="avengers_theme_piano.mp3"
                         autoPlay={true}
                         controls
                         loop
-                        muted
                     />
                 </div>
             </div>
