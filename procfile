@@ -1,2 +1,1 @@
-web: python middle_flask_api.py runserver 0.0.0.0:5000
-
+web: middle_flask_api.py app:app
