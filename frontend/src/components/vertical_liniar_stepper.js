@@ -19,6 +19,8 @@ import 'rc-checkbox/assets/index.css';
 import GaugeChart from 'react-gauge-chart'
 import FadeIn from 'react-fade-in';
 import {F} from "react-select/dist/index-4bd03571.esm";
+import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
 
 
 
@@ -122,6 +124,11 @@ export default function VerticalLinearStepper() {
     },
     icon: {
         backgroundColor: '#a9334e',
+    },
+    bigAvatar: {
+        margin: 10,
+        width: 70,
+        height: 70,
     }
 }));
     const classes = useStyles();
@@ -151,10 +158,11 @@ export default function VerticalLinearStepper() {
     };
 
     function returnLoadingGif() {
-        const gif_div = <div className="image-blurred-edge">
+        console.log(document.location.hostname)
+        const gif_div = <div className="gif_div_style">
                             <img src="thinking_loading.gif"/>
                             <br/>
-                            <div>
+                            <div className="icons_div">
                                 Thinking...
                             </div>
                         </div>
@@ -175,7 +183,6 @@ export default function VerticalLinearStepper() {
             resultStr += "A SUPERHERO!"
             subtitleStr =  "Enjoy being one of the good ones."
         }
-        let certaintyStr = "I'm about " + state.goodOrEvil['certainty'].toString() + "% certain in my estimation."
         let indicators = state.goodOrEvil['indicators']
         let indicatorsStr = "The main indicators for my assesments are the following elements: \n"
 
@@ -194,29 +201,64 @@ export default function VerticalLinearStepper() {
                                 <GaugeChart id="gauge-chart3"
                                   nrOfLevels={20}
                                   arcWidth={0.3}
+                                     colors={["#ff0f22", "#1aff00"]}
                                   percent={state.goodOrEvil['certainty'] / 100}
                                   textColor="black"
-                                  formatTextValue={value => value+' Certainty'}
+                                  formatTextValue={value => value+'% Certainty'}
                                 />
                             </FadeIn>
                             <br/>
                             <br/>
-                            <FadeIn delay={3000}>
+                            <FadeIn delay={1800}>
                                 {indicatorsStr}
                             </FadeIn>
                             <br/>
                             <br/>
-                            <FadeIn delay={4}>
+                            <FadeIn delay={2500}>
                                 {subtitleStr}
                             </FadeIn>
                             <br/>
-                            <br/>
-                            <FadeIn delay={6000}>
+                            <FadeIn delay={3000}>
                                 <div className="gif_div_style">
                                     <img src={gif_url} />
                                 </div>
                             </FadeIn>
+                            <div className='icons_div'>
+                                <Grid className="icon_grid">
+                                    <FadeIn delay={3500}>
+                                        <div className="icon_div">
+                                            <Avatar alt="Yotam Levanon" src="icon.jpeg" className={classes.bigAvatar}/>
+                                        </div>
+                                    </FadeIn>
+                                    <FadeIn delay={3600}>
+                                        <div className="icon_div">
+                                            <a href="https://github.com/YotamNHL/marvel-classifier" target="_blank">
+                                                <Avatar alt="github" src="githubicon.png" className={classes.bigAvatar}/>
+                                            </a>
+                                        </div>
+                                    </FadeIn>
+                                    <FadeIn delay={3700}>
+                                        <div className="icon_div">
+                                            <a href="https://github.com/YotamNHL/marvel-classifier/blob/master/main.ipynb" target="_blank">
+                                                <Avatar alt="jupyter" src="jupyter.png" className={classes.bigAvatar}/>
+                                            </a>
+                                        </div>
+                                    </FadeIn>
+                                    <FadeIn delay={3800}>
+                                        <div className="icon_div">
+                                            <a href="https://www.linkedin.com/in/yotam-levanon-8a4b58122/" target="_blank">
+                                                <Avatar alt="linkedin" src="linkedinicon.png" className={classes.bigAvatar}/>
+                                            </a>
+                                        </div>
+                                    </FadeIn>
+                                </Grid>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
                         </div>
+
         return gif_div
     }
 

@@ -22,8 +22,6 @@ class MainWindow extends Component {
 
 
     render() {
-
-
         return (
             <div>
                 <div className="scoreboard">

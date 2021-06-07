@@ -6,6 +6,7 @@ export default function WelcomeWindow() {
 
   return (
       <div className='welcome_to_marvel_ai'>
+          <br/>
           <div className="words">
               <span>W</span>
               <span>E</span>

@@ -8,9 +8,15 @@ from main import *
 import ast
 
 # Create the application.
-app = Flask(__name__, static_folder='./static',
-            template_folder='./template')
+app = Flask(__name__, static_folder='frontend/build',
+            template_folder='frontend/build', static_url_path="")
 CORS(app)
+
+
+# Route for the main page
+@app.route('/', methods=['GET'])
+def index():
+    return flask.render_template("index.html")
 
 
 @app.route('/getGoodBadProbability', methods=['GET'])
