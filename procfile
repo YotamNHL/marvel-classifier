@@ -1,1 +1,1 @@
-web: python middle_flask_api.py
+web: gunicorn middle_flask_api:app
