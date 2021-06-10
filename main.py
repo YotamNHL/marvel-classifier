@@ -6,6 +6,25 @@ from catboost import CatBoostClassifier
 from utils.plot_utils import *
 import json
 import shap
+from scipy.spatial.distance import cosine, euclidean
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
+
+def ready_df_for_similarity(given_df):
+    for col in given_df.columns:
+        if given_df[col].dtypes == bool:
+            given_df[col] = given_df[col].astype(int)
+
+    given_df['Gender'] = given_df['Gender'].apply(lambda x: 1 if x == 'Male' else 0)
+    cat_cols = ['Race', 'EyeColor', 'HairColor']
+    for col in cat_cols:
+        col_values = list(given_df[col].value_counts().index.to_list())
+        for value in col_values:
+            new_col_name = str(col) + "_" + str(value)
+            given_df[new_col_name] = given_df[col].apply(lambda x: 1 if str(x).lower() == str(value).lower() else 0)
+
+    given_df = given_df.drop(cat_cols, axis=1)
+    return given_df
 
 
 def aggregate_features(given_df, with_class=True):
@@ -56,39 +75,36 @@ def aggregate_features(given_df, with_class=True):
     int_cols = ['Height', 'Weight', 'Intelligence', 'Strength',
                 'Speed', 'Durability', 'Power', 'Combat']
     bool_cols = [x for x in cols if (x not in cat_cols and x not in int_cols)]
-    if not with_class:
-        print(given_df['Intelligence'])
-        print(given_df['Strength'])
-        print(given_df['Speed'])
-        print(given_df['Durability'])
-        print(given_df['Power'])
-        print(given_df['Combat'])
-        print(list(given_df.columns))
 
     given_df[cat_cols] = given_df[cat_cols].fillna(value='no_value')
     given_df[int_cols] = given_df[int_cols].fillna(value=0)
     given_df[bool_cols] = given_df[bool_cols].fillna(value=False)
+
     # cast int cols to int type
     for col in int_cols:
         given_df[col] = given_df[col].astype(int)
 
-    # Handle sparsing in haircolor values
-    haircolors_5_or_less = given_df['HairColor'].value_counts()
-    haircolors_5_or_less = haircolors_5_or_less.loc[haircolors_5_or_less < 5].index.tolist()
-    given_df['HairColor'] = given_df['HairColor'].apply(
-        lambda x: "Black" if x == 'black' else 'Other' if x in haircolors_5_or_less else x)
+    if with_class:
+        # Handle sparsing in haircolor values
+        haircolors_5_or_less = given_df['HairColor'].value_counts()
+        haircolors_5_or_less = haircolors_5_or_less.loc[haircolors_5_or_less < 5].index.tolist()
+        print(haircolors_5_or_less)
+        given_df['HairColor'] = given_df['HairColor'].apply(
+            lambda x: "Black" if x == 'black' else 'Other' if x in haircolors_5_or_less else x)
 
-    # Handle sparsing in eyecolor values
-    eyecolors_5_or_less = given_df['EyeColor'].value_counts()
-    eyecolors_5_or_less = eyecolors_5_or_less.loc[eyecolors_5_or_less < 5].index.tolist()
-    eyecolors_5_or_less.append('no_value')
-    given_df['EyeColor'] = given_df['EyeColor'].apply(lambda x: 'Other' if x in eyecolors_5_or_less else x)
+        # Handle sparsing in eyecolor values
+        eyecolors_5_or_less = given_df['EyeColor'].value_counts()
+        eyecolors_5_or_less = eyecolors_5_or_less.loc[eyecolors_5_or_less < 5].index.tolist()
+        print(eyecolors_5_or_less)
+        eyecolors_5_or_less.append('no_value')
+        given_df['EyeColor'] = given_df['EyeColor'].apply(lambda x: 'Other' if x in eyecolors_5_or_less else x)
 
-    # Handle sparsing in race values
-    race_3_or_less = given_df['Race'].value_counts()
-    race_3_or_less = race_3_or_less.loc[race_3_or_less < 3].index.tolist()
-    race_3_or_less.append('Unknown Race')
-    given_df['Race'] = given_df['Race'].apply(lambda x: 'Other' if x in race_3_or_less else x)
+        # Handle sparsing in race values
+        race_3_or_less = given_df['Race'].value_counts()
+        race_3_or_less = race_3_or_less.loc[race_3_or_less < 3].index.tolist()
+        print(race_3_or_less)
+        race_3_or_less.append('Unknown Race')
+        given_df['Race'] = given_df['Race'].apply(lambda x: 'Unknown Race' if x in race_3_or_less else x)
 
     given_df['Total'] = given_df['Intelligence'] + given_df['Strength'] + given_df['Speed'] + given_df['Durability'] + \
                         given_df['Power'] + given_df['Combat']
@@ -115,7 +131,6 @@ def get_hero_proba(given_str):
 
     df = aggregate_features(df, with_class=True)
     given_df_aggregated = aggregate_features(given_df, with_class=False)
-
     X, y = df.drop(['index', 'class'], axis=1), df['class']
 
     cbc = CatBoostClassifier(cat_features=get_cat_feature_names(X), class_weights=[0.33, 0.67], random_state=5,
@@ -146,6 +161,25 @@ def get_hero_proba(given_str):
     final_result_dict['result'] = True if result[0] == 'True' else False
     final_result_dict['certainty'] = round(certainty, 2)
     final_result_dict['indicators'] = final_indicators_list
+
+    df = df.drop('index', axis=1)
+    given_sample = given_df_aggregated.drop('index', axis=1)
+    given_sample['class'] = 1 if final_result_dict['result'] else 0
+    df_with_sample = pd.concat([df, given_sample], ignore_index=True)
+    df_with_sample_for_similarity = ready_df_for_similarity(df_with_sample)
+    # scaler = StandardScaler()
+    scaler = MinMaxScaler()
+    df_with_sample_scaled = pd.DataFrame(scaler.fit_transform(df_with_sample_for_similarity), columns=df_with_sample_for_similarity.columns)
+    # df_with_sample_scaled = df_with_sample_scaled[df_with_sample_scaled['class'] == given_sample['class'][0]]
+    df_with_sample_scaled = df_with_sample_scaled.drop(['is_human', 'is_mutant', 'has_blue_eyes', 'amount_of_superpowers', 'class'], axis=1)
+    df_for_similarity_scaled = df_with_sample_scaled.iloc[:-1, :]
+    given_sample_for_similarity_scaled = df_with_sample_scaled.iloc[-1, :]
+
+    dists = [euclidean(given_sample_for_similarity_scaled, df_for_similarity_scaled.loc[i]) for i in range(df_for_similarity_scaled.shape[0])]
+    original_df = pd.read_csv('data/marvel_demo_stats_powers.csv')
+    closet_obs = original_df.loc[np.argmin(dists)]
+    final_result_dict['similar_character'] = closet_obs['Name']
+
     return final_result_dict
 
 

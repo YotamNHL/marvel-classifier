@@ -191,6 +191,8 @@ export default function VerticalLinearStepper() {
         }
         indicatorsStr = indicatorsStr.substring(0, indicatorsStr.length - 2);
         indicatorsStr += "."
+        let mostSimilarStr = "You're most similar to the character: "
+        let mostSimilarCharacter = String(state.goodOrEvil['similar_character'])
         const gif_div = <div className="result_div_style">
                             <FadeIn>
                                 {resultStr}
@@ -214,11 +216,19 @@ export default function VerticalLinearStepper() {
                             </FadeIn>
                             <br/>
                             <br/>
-                            <FadeIn delay={2500}>
+                            <FadeIn delay={2000}>
+                                {mostSimilarStr}
+                                <a href={"https://www.google.co.il/search?q=" + mostSimilarCharacter + "&tbm=isch"}>
+                                    {mostSimilarCharacter}
+                                </a>
+                            </FadeIn>
+                            <br/>
+                            <br/>
+                            <FadeIn delay={3000}>
                                 {subtitleStr}
                             </FadeIn>
                             <br/>
-                            <FadeIn delay={3000}>
+                            <FadeIn delay={3200}>
                                 <div className="gif_div_style">
                                     <img src={gif_url} />
                                 </div>
@@ -265,7 +275,7 @@ export default function VerticalLinearStepper() {
     function getHeroProba() {
         let all_features_dict = state
         let all_features_string = JSON.stringify(all_features_dict).replace(/%22/g,"")
-        let url = "https://marvel-ai.herokuapp.com/getGoodBadProbability?HeroData=" + all_features_string;
+        let url = "http://127.0.0.1:5000/getGoodBadProbability?HeroData=" + all_features_string;
         return fetch(url)
             .then((res) => {return res.json();})
             .then(data => data['result']);
