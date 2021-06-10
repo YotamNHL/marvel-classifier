@@ -5,7 +5,7 @@ This tool lets you create a profile of a comic book character of your own, and i
 <br/> The classification is based on an popular algorithm called Catboost, which in this case being used upon a complete Marvel Comicbooks' characters database.
 <br/> Also, the user will also be told of the character that he is most similar too from those comics, in terms of his stats and super-powers.
 
-## Show me show me!
+## Show me!
 
 https://user-images.githubusercontent.com/46316863/121484179-a3e86480-c9d7-11eb-8a6b-6c41d459e14f.mp4
 
