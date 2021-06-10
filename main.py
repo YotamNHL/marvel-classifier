@@ -113,6 +113,9 @@ def aggregate_features(given_df, with_class=True):
         superpowers_cols.remove(col)
 
     given_df['amount_of_superpowers'] = given_df[superpowers_cols].astype(int).sum(axis=1)
+    given_df['amount_of_superpowers_per_strength'] = given_df['amount_of_superpowers'] / (given_df['Strength'] + 1)
+    given_df['amount_of_superpowers_per_power'] = given_df['amount_of_superpowers'] / (given_df['Power'] + 1)
+    given_df['bmi'] = abs(given_df['Weight']) / (abs(given_df['Height']) / 100) ** 2.
 
     given_df = given_df.reset_index()
     given_df = given_df.reindex(sorted(given_df.columns), axis=1)
@@ -170,14 +173,14 @@ def get_hero_proba(given_str):
     # scaler = StandardScaler()
     scaler = MinMaxScaler()
     df_with_sample_scaled = pd.DataFrame(scaler.fit_transform(df_with_sample_for_similarity), columns=df_with_sample_for_similarity.columns)
-    # df_with_sample_scaled = df_with_sample_scaled[df_with_sample_scaled['class'] == given_sample['class'][0]]
+    result = given_sample['class'][0]
     df_with_sample_scaled = df_with_sample_scaled.drop(['is_human', 'is_mutant', 'has_blue_eyes', 'amount_of_superpowers', 'class'], axis=1)
     df_for_similarity_scaled = df_with_sample_scaled.iloc[:-1, :]
     given_sample_for_similarity_scaled = df_with_sample_scaled.iloc[-1, :]
 
-    dists = [euclidean(given_sample_for_similarity_scaled, df_for_similarity_scaled.loc[i]) for i in range(df_for_similarity_scaled.shape[0])]
+    dists = [euclidean(given_sample_for_similarity_scaled, df_for_similarity_scaled.iloc[i]) for i in range(df_for_similarity_scaled.shape[0])]
     original_df = pd.read_csv('data/marvel_demo_stats_powers.csv')
-    closet_obs = original_df.loc[np.argmin(dists)]
+    closet_obs = original_df.iloc[np.argmin(dists)]
     final_result_dict['similar_character'] = closet_obs['Name']
 
     return final_result_dict

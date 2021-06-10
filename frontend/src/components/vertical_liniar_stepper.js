@@ -191,7 +191,7 @@ export default function VerticalLinearStepper() {
         }
         indicatorsStr = indicatorsStr.substring(0, indicatorsStr.length - 2);
         indicatorsStr += "."
-        let mostSimilarStr = "You're most similar to the character: "
+        let mostSimilarStr = "Im many ways, you remind me of this marvel character: "
         let mostSimilarCharacter = String(state.goodOrEvil['similar_character'])
         const gif_div = <div className="result_div_style">
                             <FadeIn>
@@ -218,7 +218,7 @@ export default function VerticalLinearStepper() {
                             <br/>
                             <FadeIn delay={2000}>
                                 {mostSimilarStr}
-                                <a href={"https://www.google.co.il/search?q=" + mostSimilarCharacter + "&tbm=isch"}>
+                                <a href={"https://www.google.co.il/search?q=marvel " + mostSimilarCharacter + "&tbm=isch"}>
                                     {mostSimilarCharacter}
                                 </a>
                             </FadeIn>
@@ -275,7 +275,7 @@ export default function VerticalLinearStepper() {
     function getHeroProba() {
         let all_features_dict = state
         let all_features_string = JSON.stringify(all_features_dict).replace(/%22/g,"")
-        let url = "http://127.0.0.1:5000/getGoodBadProbability?HeroData=" + all_features_string;
+        let url = "https://marvel-ai.herokuapp.com/getGoodBadProbability?HeroData=" + all_features_string;
         return fetch(url)
             .then((res) => {return res.json();})
             .then(data => data['result']);
