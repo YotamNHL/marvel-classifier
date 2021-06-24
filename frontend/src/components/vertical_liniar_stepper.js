@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -18,7 +18,7 @@ import {RangeStepInput} from 'react-range-step-input';
 import 'rc-checkbox/assets/index.css';
 import GaugeChart from 'react-gauge-chart'
 import FadeIn from 'react-fade-in';
-import {F} from "react-select/dist/index-4bd03571.esm";
+// import {F} from "react-select/dist/index-4bd03571.esm";
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 
@@ -160,7 +160,7 @@ export default function VerticalLinearStepper() {
     function returnLoadingGif() {
         console.log(document.location.hostname)
         const gif_div = <div className="gif_div_style">
-                            <img src="thinking_loading.gif"/>
+                            <img src="thinking_loading.gif" alt="loading..."/>
                             <br/>
                             <div className="icons_div">
                                 Thinking...
@@ -230,7 +230,7 @@ export default function VerticalLinearStepper() {
                             <br/>
                             <FadeIn delay={3200}>
                                 <div className="gif_div_style">
-                                    <img src={gif_url} />
+                                    <img src={gif_url} alt=""/>
                                 </div>
                             </FadeIn>
                             <div className='icons_div'>

@@ -16,9 +16,6 @@ frontend/.pnp.js
 # testing
 frontend/coverage
 
-
-
-
 # misc
 frontend/.DS_Store
 frontend/.env.local

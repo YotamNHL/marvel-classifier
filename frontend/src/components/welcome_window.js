@@ -1,5 +1,5 @@
 import React from "react";
-import { AwesomeButton } from "react-awesome-button";
+// import { AwesomeButton } from "react-awesome-button";
 import './styles/welcome_window.css';
 
 export default function WelcomeWindow() {
