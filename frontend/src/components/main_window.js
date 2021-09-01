@@ -4,7 +4,6 @@ import VerticalLinearStepper from './vertical_liniar_stepper'
 import WelcomeWindow from "./welcome_window";
 import {AwesomeButton} from "react-awesome-button";
 import "react-awesome-button/dist/styles.css";
-import ReactAudioPlayer from 'react-audio-player';
 
 /* The scoreboard component (which also consists of 2 'Team' component) one for every game session. */
 class MainWindow extends Component {
@@ -36,14 +35,6 @@ class MainWindow extends Component {
                 <br/>
                 <br/>
                 <br/>
-                <div className="audio_player">
-                    <ReactAudioPlayer
-                        src="avengers_theme_piano.mp3"
-                        autoPlay={true}
-                        controls
-                        loop
-                    />
-                </div>
             </div>
         )
     }
