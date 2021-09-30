@@ -3,7 +3,7 @@
 ## What's that
 This tool lets you create a profile of a comic book character of your own, and in results it classifies your creation as a superhero or a supervillain.
 <br/> The classification is based on an popular algorithm called Catboost, which in this case being used upon a complete Marvel Comicbooks' characters database.
-<br/> Also, the user will also be told of the character that he is most similar too from those comics, in terms of his stats and super-powers.
+<br/> Also, the user will also be told of the character that he is most similar to from those comics, in terms of his stats and super-powers.
 
 ## Show me!
 
