@@ -5,8 +5,8 @@ async-generator==1.10
 attrs==21.2.0
 backcall==0.2.0
 bleach==3.3.0
-Brotli==1.0.9
-catboost==0.26
+Brotli
+catboost
 certifi==2021.5.30
 cffi==1.14.5
 chardet==4.0.0
