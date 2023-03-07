@@ -16,4 +16,4 @@ def get_cat_feature_names(X):
     :param X: the input features (a DataFrame)
     :return: the names of the categorical features
     """
-    return X.columns[~X.dtypes.apply(is_numeric_dtype).to_numpy()]
+    return list(X.columns[~X.dtypes.apply(is_numeric_dtype).to_numpy()])

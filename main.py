@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import yaml
 
 from utils.general_utils import *
@@ -28,6 +29,8 @@ def ready_df_for_similarity(given_df):
 
 def aggregate_features(given_df, with_class=True):
     top_features = yaml.safe_load(open('./config.yaml', 'r'))['top_features']
+    print("THE TOP FEATURES ARE")
+    print(top_features)
     if with_class:
         top_features.append('class')
 
