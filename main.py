@@ -3,7 +3,6 @@ import pandas as pd
 import os
 from utils.general_utils import *
 from catboost import CatBoostClassifier
-from utils.plot_utils import *
 import json
 import shap
 from scipy.spatial.distance import cosine, euclidean
