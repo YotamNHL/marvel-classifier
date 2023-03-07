@@ -1,12 +1,13 @@
-import matplotlib.pyplot as plt
 import pandas as pd
-import os
+import numpy as np
+import yaml
+
 from utils.general_utils import *
 from catboost import CatBoostClassifier
 import json
 import shap
-from scipy.spatial.distance import cosine, euclidean
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from scipy.spatial.distance import euclidean
+from sklearn.preprocessing import MinMaxScaler
 
 
 def ready_df_for_similarity(given_df):
@@ -27,41 +28,9 @@ def ready_df_for_similarity(given_df):
 
 
 def aggregate_features(given_df, with_class=True):
-    top_features = [
-        # categorical features
-        'Gender',
-        'HairColor',
-        'EyeColor',
-        'Race',
-        # int features
-        'Strength',
-        'Speed',
-        'Durability',
-        'Power',
-        'Combat',
-        'Intelligence',
-        'Height',
-        'Weight',
-        # Boolean features
-        'Super Strength',
-        'Stamina',
-        'Stealth',
-        'Enhanced Senses',
-        'Flight',
-        'Energy Blasts',
-        'Energy Absorption',
-        'Shapeshifting',
-        'Accelerated Healing',
-        'Force Fields',
-        'Psionic Powers',
-        'Weapon-based Powers',
-        'Energy Manipulation',
-        'Reflexes',
-        'Molecular Manipulation',
-        'Super Durability',
-        'Agility',
-        'Longevity',
-        'Super Speed']
+    top_features = yaml.safe_load(open('./config.yaml', 'r'))['top_features']
+    print("THE TOP FEATURES ARE")
+    print(top_features)
     if with_class:
         top_features.append('class')
 
@@ -124,7 +93,6 @@ def aggregate_features(given_df, with_class=True):
 def get_hero_proba(given_str):
     given_dict = json.loads(given_str)
     given_df = pd.DataFrame(given_dict, index=[0])
-    # given_df = pd.read_json(given_dict)
     df = pd.read_csv('data/marvel_demo_stats_powers.csv')
     df = df.replace('-', 'no_value')
     df['EyeColor'] = df['EyeColor'].apply(lambda

@@ -1,11 +1,8 @@
-import os
 import flask
 from flask import Flask
 from flask import request
 from flask_cors import CORS
-import json
 from main import *
-import ast
 
 # Create the application.
 app = Flask(__name__, static_folder='frontend/build',
