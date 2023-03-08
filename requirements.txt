@@ -71,8 +71,8 @@ jupyterlab-widgets
 kiwisolver==1.4.4
 llvmlite==0.39.1
 MarkupSafe==2.1.2
-matplotlib==3.7.1
-matplotlib-inline==0.1.6
+matplotlib
+matplotlib-inline
 mistune==2.0.5
 nbclassic==0.5.3
 nbclient==0.7.2
