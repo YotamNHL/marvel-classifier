@@ -33,7 +33,6 @@ defusedxml==0.7.1
 dtreeviz==2.2.0
 exceptiongroup==1.1.0
 executing==1.2.0
-explainerdashboard==0.4.2.1
 fastjsonschema==2.16.3
 Flask==2.2.3
 Flask-Compress==1.13
