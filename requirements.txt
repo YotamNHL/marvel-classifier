@@ -85,7 +85,7 @@ numba==0.56.4
 numpy
 oyaml==1.0
 packaging==23.0
-pandas==1.5.3
+pandas
 pandocfilters==1.5.0
 parso==0.8.3
 pexpect==4.8.0
