@@ -276,7 +276,7 @@ export default function VerticalLinearStepper() {
         let all_features_dict = state
         let all_features_string = JSON.stringify(all_features_dict).replace(/%22/g,"")
         // let url = "http://127.0.0.1:5000/getGoodBadProbability?HeroData=" + all_features_string;
-        let url = "https://localhost:5000/getGoodBadProbability?HeroData=" + all_features_string;
+        let url = "https://marvel-ai.onrender.com/getGoodBadProbability?HeroData=" + all_features_string;
         return fetch(url)
             .then((res) => {return res.json();})
             .then(data => data['result']);
